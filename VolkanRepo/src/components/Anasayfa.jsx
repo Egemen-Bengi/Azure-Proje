@@ -7,7 +7,16 @@ import {
   RobotOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
+import "./cssDosyalari/Anasayfa.css"; // CSS dosyasını içe aktarın
+import FilmOneriFormu from "./Formlar/FilmOneriForm";
+import DiziOneriFormu from "./Formlar/DiziOneriFormu";
+import FilmlerFormu from "./Formlar/FilmlerFormu";
+import DizilerFormu from "./Formlar/DizilerFormu";
+import IzlenecekFilmlerForm from "./Formlar/İzlenecekFilmlerForm";
+import IzlenecekDizilerForm from "./Formlar/İzlenecekDizilerForm";
+
 const { Header, Content, Footer, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
   return {
     key,
@@ -16,6 +25,7 @@ function getItem(label, key, icon, children) {
     label,
   };
 }
+
 const items = [
   getItem("Filmler", "1", <AppstoreOutlined />),
   getItem("Diziler", "2", <DesktopOutlined />),
@@ -35,14 +45,14 @@ const items = [
 
 const Anasayfa = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedMenuLabel, setSelectedMenuLabel] = useState("Filmler"); // labelı saklamak için state
-  const [selectedMenuKey, setSelectedMenuKey] = useState("1"); // seçili menü keyi için state
+  const [selectedMenuLabel, setSelectedMenuLabel] = useState("Filmler");
+  const [selectedMenuKey, setSelectedMenuKey] = useState("1");
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   const handleMenuClick = ({ key }) => {
-    setSelectedMenuKey(key); // seçili menü keyini güncelle
+    setSelectedMenuKey(key);
     const selectedItem = items.find(
       (item) =>
         item.key === key || item.children?.some((child) => child.key === key)
@@ -56,75 +66,66 @@ const Anasayfa = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout className="layout">
       <Sider
+        className="sider"
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className="demo-logo-vertical" />
+        <div className="sider-header">
+          
+        </div>
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
           mode="inline"
           items={items}
-          onClick={handleMenuClick} // Menü tıklama olayını bağla
+          onClick={handleMenuClick}
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <div
-            style={{
-              padding: "0 16px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <h1 style={{ margin: 0 }}>{selectedMenuLabel}</h1>
+        <Header className="header">
+          <div className="header-content">
+            <h1 className="header-title">{selectedMenuLabel}</h1>
           </div>
         </Header>
-        <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            /* Burada breadcrumb öğelerini dinamik olarak oluşturabilirsin */
+        <Content className="content">
+          <Breadcrumb className="breadcrumb">
+            {/* Burada breadcrumb öğelerini dinamik olarak oluşturabilirsiniz */}
           </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {/* Seçili menüye göre içerik gösterimi  yapilacak
-            her birisi icin form olusturarak kod gorunumu basitlestirilecek*/}
+          <div className="content-container">
             {(() => {
               switch (selectedMenuKey) {
                 case "1":
-                  return <h2>Filmler İçeriği</h2>; 
+                  return <h2><FilmlerFormu></FilmlerFormu></h2>;
                 case "2":
-                  return <h2>Diziler İçeriği</h2>; 
+                  return <h2><DizilerFormu></DizilerFormu></h2>;
                 case "3":
-                  return <h2>Film Önerisi İçeriği</h2>; 
+                  return <h2><FilmOneriFormu></FilmOneriFormu></h2>;
                 case "4":
-                  return <h2>Dizi Önerisi İçeriği</h2>; 
+                  return <h2><DiziOneriFormu></DiziOneriFormu></h2>;
                 case "6":
-                  return <h2>İzlenecek Filmler İçeriği</h2>; 
+                  return <h2><IzlenecekFilmlerForm/></h2>;
                 case "7":
-                  return <h2>İzlenecek Diziler İçeriği</h2>; 
+                  return <h2><IzlenecekDizilerForm/></h2>;
                 case "8":
-                  return <h2>İzlediğim Filmler İçeriği</h2>; 
+                  return <h2>İzlediğim Filmler İçeriği</h2>;
                 case "9":
-                  return <h2>İzlediğim Diziler İçeriği</h2>; 
+                  return <h2>İzlediğim Diziler İçeriği</h2>;
+                default:
+                  return null;
               }
             })()}
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
+        <Footer className="footer">
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
       </Layout>
     </Layout>
   );
 };
+
 export default Anasayfa;

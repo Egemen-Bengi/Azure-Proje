@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input, Modal } from "antd";
+import { Button, Checkbox, Form, Input, Modal, AutoComplete } from "antd";
 import "antd/dist/reset.css";
 import { Header } from "antd/es/layout/layout";
 import RegisterModal from "./RegisterModal";
 
 const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
+  const [options, setOptions] = useState([]);
   return (
 
       <div style={{ width: "100%", maxWidth: 600 }}>
