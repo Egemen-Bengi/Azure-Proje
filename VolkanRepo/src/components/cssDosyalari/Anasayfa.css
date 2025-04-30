@@ -1,0 +1,64 @@
+/* Genel Layout */
+.layout {
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+/* Sider */
+.sider {
+  background: #001529;
+}
+
+.sider-header {
+  background: #001529; /* Sider ile aynı renk */
+  color: white; /* Yazı rengini beyaz yap */
+  text-align: center;
+  padding: 20px;
+  margin-top:20px ;
+  
+}
+
+/* Header */
+.header {
+  padding: 0;
+  background: #001529; /* Sider ile aynı renk */
+  color: white; /* Yazı rengini beyaz yap */
+}
+
+.header-content {
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  margin: 0;
+}
+
+/* Content */
+.content {
+    margin: 16px 16px 0; /* Üstte ve yanlarda boşluk */
+    background-color: #ffffff; /* Beyaz arka plan */
+    border-radius: 8px; /* Hafif yuvarlatılmış köşeler */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif göl*/
+  }
+
+
+.breadcrumb {
+  
+    padding: 16px;
+    background-color: white;
+}
+
+.content-container {
+  padding: 24px;
+  min-height: 360px;
+  background: var(--colorBgContainer);
+  border-radius: var(--borderRadiusLG);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+}
