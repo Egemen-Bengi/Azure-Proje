@@ -22,34 +22,51 @@ namespace Azure.Repositories
             _passwordService = passwordService;
             _tokenService = tokenService;
         }
-        public async Task<KullaniciDto> LoginKullaniciAsync(KullaniciLoginDto loginDto)
-        {
-            var kullanici = await _context.Kullanicilars.FirstOrDefaultAsync(x => x.KullaniciAdi == loginDto.KullaniciAdi) ?? 
-            throw new Exception("Boyle bir kullanici yok!");
-        
-            if(_passwordService.VerifyPassword(kullanici, loginDto.Parola, kullanici.ParolaH) == false) throw new Exception("Kullanici adi veya parola hatali!");
 
-            var kullaniciDto = kullanici.ToDto(_tokenService.CreateToken(kullanici));
-            return kullaniciDto;
+        public async Task<List<KullaniciDto>> GetAllKullanicilar()
+        {
+            var kullaniciList = await _context.Kullanicilars.Include(x => x.Rol).ToListAsync();
+            return kullaniciList.ToKullaniciDtoList();
         }
 
-        public async Task<KullaniciDto> RegisterKullaniciAsync(KullaniciRegisterDto registerDto)
+        public async Task<KullaniciDto> GetKullaniciByEmail(string email)
         {
-            if (await _context.Kullanicilars.AnyAsync(x => x.KullaniciAdi == registerDto.KullaniciAdi)) throw new Exception("Bu kullanici adi zaten alindi!");
-            if (await _context.Kullanicilars.AnyAsync(x => x.Email == registerDto.Email)) throw new Exception("Bu email zaten alindi!");
+            var kullanici = await _context.Kullanicilars.Include(x => x.Rol).FirstOrDefaultAsync(x => x.Email == email) ?? throw new Exception("Kullanici Bulunamadi");
+            return kullanici.ToDto();
+        }
 
+        public async Task<KullaniciDto> GetKullaniciById(string id)
+        {
+            var kullanici = await _context.Kullanicilars.Include(x => x.Rol).FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Kullanici Bulunamadi");
+            return kullanici.ToDto();
+        }
+
+        public async Task<Kullanicilar> CreateKullaniciAsync(KullaniciRegisterDto registerDto)
+        {
             var kullaniciRol = await _context.Rollers.FirstOrDefaultAsync(x => x.RolAdi == "Standart") ?? throw new Exception("Kullaniciya rol verilirken bir sorun oluştu!");
             var kullanici = registerDto.ToKullanici(kullaniciRol);
             var hashedPassword = _passwordService.HashPassword(kullanici, registerDto.Parola);
-            
+            var kullaniciId = Guid.NewGuid().ToString();
+
+            if(await _context.Kullanicilars.FirstOrDefaultAsync(x => x.Id == kullaniciId) != null) throw new Exception("GUID imkansizi basardi");
+
+            kullanici.SetId(kullaniciId);
             kullanici.SetHashedPassword(hashedPassword);
 
             var addedKullanici = await _context.AddAsync(kullanici) ?? throw new Exception("Kullanici Olusturulamadi!");
             await _context.SaveChangesAsync();
-            var addedKullaniciDto = addedKullanici.Entity.ToDto(_tokenService.CreateToken(addedKullanici.Entity));
 
-            return addedKullaniciDto;
-            
+            return addedKullanici.Entity;
+        }
+
+        public async Task<Kullanicilar> DeleteKullaniciById(string id)
+        {
+            var kullanici = await _context.Kullanicilars.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Kullanici bulunamadi");
+
+            _context.Kullanicilars.Remove(kullanici);
+            await _context.SaveChangesAsync();
+
+            return kullanici;
         }
     }
 }

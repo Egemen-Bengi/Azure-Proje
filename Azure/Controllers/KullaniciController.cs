@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
-using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
-using Azure.DTOs.KullaniciDtos;
 using Azure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,41 +20,96 @@ namespace Azure.Controllers
             _kullaniciRepo = kullaniciRepo;
             _tokenService = tokenService;
         }
-        [Function("Login")]
-        public async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "kullanici/login")] HttpRequest request)
+
+        [Function("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici")] HttpRequest request)
         {
-            string? authHeader = request.Headers["Authorization"];
-            if(string.IsNullOrEmpty(authHeader) || authHeader.StartsWith("Bearer "))
+            string? authHeader = request.Headers.Authorization;
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
                 return new UnauthorizedResult();
 
-            string token = authHeader.Substring("Bearer ".Length).Trim();
-            
-            if(_tokenService.ValidateToken(token) == false) return new UnauthorizedResult();
+            string token = authHeader["Bearer ".Length..].Trim();
 
-            KullaniciLoginDto? loginDto = await JsonSerializer.DeserializeAsync<KullaniciLoginDto>(request.Body);
-            if (loginDto == null) return new BadRequestObjectResult("Kullanici adi ve parola bos olamaz!");
+            if (!_tokenService.ValidateToken(token))
+                return new UnauthorizedResult();
 
-            try{
-                var kullanici = await _kullaniciRepo.LoginKullaniciAsync(loginDto);
+            var kullaniciList = await _kullaniciRepo.GetAllKullanicilar();
+
+            return new OkObjectResult(kullaniciList);
+        }
+
+        [Function("GetUserById")]
+        public async Task<IActionResult> GetUserById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici/{id}")] HttpRequest request, string id)
+        {
+            string? authHeader = request.Headers.Authorization;
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedResult();
+
+            string token = authHeader["Bearer ".Length..].Trim();
+
+            if (!_tokenService.ValidateToken(token))
+                return new UnauthorizedResult();
+
+            try
+            {
+                var kullanici = await _kullaniciRepo.GetKullaniciById(id);
                 return new OkObjectResult(kullanici);
-
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
         }
 
-        [Function("Register")]
-        public async Task<IActionResult> Register([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "kullanici/register")] HttpRequest request)
+        [Function("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici")] HttpRequest request)
         {
-            KullaniciRegisterDto? registerDto = await JsonSerializer.DeserializeAsync<KullaniciRegisterDto>(request.Body);
-            if (registerDto == null) return new BadRequestObjectResult("Kullanici adi ve parola bos olamaz!");
+            string? authHeader = request.Headers.Authorization;
 
-            try{
-                var kullanici = await _kullaniciRepo.RegisterKullaniciAsync(registerDto);
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedResult();
+
+            string token = authHeader["Bearer ".Length..].Trim();
+
+            if (!_tokenService.ValidateToken(token))
+                return new UnauthorizedResult();
+
+            try
+            {
+                using var reader = new StreamReader(request.Body);
+                string requestBody = await reader.ReadToEndAsync();
+                string email = JsonSerializer.Deserialize<string>(requestBody) ?? throw new Exception("Email string türünde olmalıdır");
+
+                var kullanici = await _kullaniciRepo.GetKullaniciByEmail(email);
                 return new OkObjectResult(kullanici);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+        }
 
-            }catch(Exception e)
+        [Function("DeleteUserById")]
+        public async Task<IActionResult> DeleteUserById([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "kullanici/{id}")] HttpRequest request, string id)
+        {
+            string? authHeader = request.Headers.Authorization;
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedResult();
+
+            string token = authHeader["Bearer ".Length..].Trim();
+
+            if (!_tokenService.ValidateToken(token))
+                return new UnauthorizedResult();
+
+            try
+            {
+                var kullanici = await _kullaniciRepo.DeleteKullaniciById(id);
+                return new OkObjectResult(kullanici);
+            }
+            catch (Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
             }

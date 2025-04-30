@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure.Models;
 
-namespace Azure.DTOs.KullaniciDtos
+namespace Azure.DTOs.AccountDtos
 {
-    public class KullaniciDto
+    public class KullaniciTokenDto
     {
         public string Id { get; set; } = null!;
 
@@ -17,5 +17,6 @@ namespace Azure.DTOs.KullaniciDtos
         public int RolId { get; set; }
 
         public virtual Roller Rol { get; set; } = null!;
+        public string Token { get; set; } = null!;
     }
 }

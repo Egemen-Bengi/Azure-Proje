@@ -46,6 +46,7 @@ builder.Services.AddDbContext<OneridbContext>(options =>
 builder.Services.AddScoped<IPasswordHasher<Kullanicilar>, PasswordHasher<Kullanicilar>>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IKullaniciRepository, KullaniciRepository>();
 
 

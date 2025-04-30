@@ -9,12 +9,11 @@ namespace Azure.Mappers
 {
     public static class KullaniciMappers
     {
-        public static KullaniciDto ToDto(this Kullanicilar kullanici, string token){
+        public static KullaniciDto ToDto(this Kullanicilar kullanici){
             return new KullaniciDto
             {
                 KullaniciAdi = kullanici.KullaniciAdi,
                 Email = kullanici.Email,
-                Token = token,
                 RolId = kullanici.RolId,
                 Id = kullanici.Id,
                 Rol = kullanici.Rol
@@ -34,6 +33,14 @@ namespace Azure.Mappers
 
         public static void SetHashedPassword(this Kullanicilar user, string hashedPassword){
             user.ParolaH = hashedPassword;
+        }
+
+        public static void SetId(this Kullanicilar user, string Id){
+            user.Id = Id;
+        }
+
+        public static List<KullaniciDto> ToKullaniciDtoList(this List<Kullanicilar> kullanicilarList){
+            return kullanicilarList.Select(x => x.ToDto()).ToList();
         }
     }
 }
