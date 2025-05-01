@@ -64,7 +64,7 @@ namespace Azure.Controllers
         }
 
         [Function("GetUserByEmail")]
-        public async Task<IActionResult> GetUserByEmail([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici")] HttpRequest request)
+        public async Task<IActionResult> GetUserByEmail([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici/{email}")] HttpRequest request, string email)
         {
             string? authHeader = request.Headers.Authorization;
 
@@ -78,10 +78,6 @@ namespace Azure.Controllers
 
             try
             {
-                using var reader = new StreamReader(request.Body);
-                string requestBody = await reader.ReadToEndAsync();
-                string email = JsonSerializer.Deserialize<string>(requestBody) ?? throw new Exception("Email string türünde olmalıdır");
-
                 var kullanici = await _kullaniciRepo.GetKullaniciByEmail(email);
                 return new OkObjectResult(kullanici);
             }
