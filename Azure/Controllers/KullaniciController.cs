@@ -100,6 +100,11 @@ namespace Azure.Controllers
             if (!_tokenService.ValidateToken(token))
                 return new UnauthorizedResult();
 
+            var claims = _tokenService.GetTokenClaims(token);
+            
+            if (claims["role"] != "Admin")
+                return new UnauthorizedObjectResult("Yetkisiz Erisim");
+
             try
             {
                 var kullanici = await _kullaniciRepo.DeleteKullaniciById(id);

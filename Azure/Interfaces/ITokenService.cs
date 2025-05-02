@@ -10,5 +10,7 @@ namespace Azure.Interfaces
     {
         public string CreateToken(Kullanicilar kullanici);
         public bool ValidateToken(string token);
+
+        public Dictionary<string, string> GetTokenClaims(string token);
     }
 }

@@ -45,6 +45,14 @@ namespace Azure.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public Dictionary<string, string> GetTokenClaims(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+            var claims = jwtToken.Claims.ToDictionary(c => c.Type, c => c.Value);
+            return claims;
+        }
+
         public bool ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
