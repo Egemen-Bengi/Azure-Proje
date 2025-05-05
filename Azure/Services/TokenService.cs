@@ -27,7 +27,7 @@ namespace Azure.Services
                 new Claim(ClaimTypes.NameIdentifier, kullanici.Id.ToString()),
                 new Claim(ClaimTypes.Name, kullanici.KullaniciAdi),
                 new Claim(ClaimTypes.Email, kullanici.Email),
-                new Claim(ClaimTypes.Role, kullanici.Rol.ToString()!)
+                new Claim(ClaimTypes.Role, kullanici.Rol.RolAdi)
             };
 
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]!));
@@ -36,7 +36,7 @@ namespace Azure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(Claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
 

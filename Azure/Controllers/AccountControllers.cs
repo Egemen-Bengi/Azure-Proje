@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
-using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
 using Azure.DTOs.KullaniciDtos;
 using Azure.Interfaces;
@@ -28,6 +27,8 @@ namespace Azure.Controllers
         {
             KullaniciLoginDto? loginDto = await JsonSerializer.DeserializeAsync<KullaniciLoginDto>(request.Body);
             if (loginDto == null) return new BadRequestObjectResult("Kullanici adi ve parola bos olamaz!");
+
+            Console.WriteLine(loginDto);
 
             try{
                 var kullanici = await _accountRepo.LoginKullaniciAsync(loginDto);

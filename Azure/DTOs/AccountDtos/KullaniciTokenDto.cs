@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Azure.Models;
 
@@ -16,6 +17,7 @@ namespace Azure.DTOs.AccountDtos
 
         public int RolId { get; set; }
 
+        [JsonIgnore]
         public virtual Roller Rol { get; set; } = null!;
         public string Token { get; set; } = null!;
     }

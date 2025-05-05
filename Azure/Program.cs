@@ -20,10 +20,12 @@ builder.ConfigureFunctionsWebApplication();
 // builder.Services
 //     .AddApplicationInsightsTelemetryWorkerService()
 //     .ConfigureFunctionsApplicationInsights();
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<OneridbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("AzureConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("AzureConnection"), option => option.EnableRetryOnFailure()));
 
             // JWT doğrulama yapılandırması
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -43,13 +45,17 @@ builder.Services.AddDbContext<OneridbContext>(options =>
                 });
 
 
+
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IPasswordHasher<Kullanicilar>, PasswordHasher<Kullanicilar>>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IKullaniciRepository, KullaniciRepository>();
+builder.Services.AddScoped<IRollerRepository, RolRepository>();
+builder.Services.AddFunctionsWorkerDefaults();
 
 
+var host = builder.Build();
+host.Run();
 
-
-builder.Build().Run();

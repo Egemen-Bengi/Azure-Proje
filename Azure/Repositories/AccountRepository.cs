@@ -29,12 +29,14 @@ namespace Azure.Repositories
         
         public async Task<KullaniciTokenDto> LoginKullaniciAsync(KullaniciLoginDto loginDto)
         {
-            var kullanici = await _context.Kullanicilars.FirstOrDefaultAsync(x => x.KullaniciAdi == loginDto.KullaniciAdi) ?? 
+            var kullanici = await _context.Kullanicilars.Include(k => k.Rol).FirstOrDefaultAsync(x => x.KullaniciAdi == loginDto.KullaniciAdi) ?? 
             throw new Exception("Boyle bir kullanici yok!");
         
             if(_passwordService.VerifyPassword(kullanici, loginDto.Parola, kullanici.ParolaH) == false) throw new Exception("Kullanici adi veya parola hatali!");
 
             var kullaniciTokenDto = kullanici.ToTokenDto(_tokenService.CreateToken(kullanici));
+
+            Console.WriteLine(kullaniciTokenDto);
             return kullaniciTokenDto;
         }
 

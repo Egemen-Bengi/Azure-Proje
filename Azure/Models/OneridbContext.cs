@@ -15,6 +15,10 @@ public partial class OneridbContext : DbContext
     {
     }
 
+    public virtual DbSet<Diziler> Dizilers { get; set; }
+
+    public virtual DbSet<DizilerVeKullanicilar> DizilerVeKullanicilars { get; set; }
+
     public virtual DbSet<Kullanicilar> Kullanicilars { get; set; }
 
     public virtual DbSet<Roller> Rollers { get; set; }
@@ -24,6 +28,38 @@ public partial class OneridbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Diziler>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Diziler__3214EC0771A4189C");
+
+            entity.ToTable("Diziler");
+
+            entity.Property(e => e.DiziAciklamasi)
+                .HasMaxLength(255)
+                .HasColumnName("Dizi Aciklamasi");
+            entity.Property(e => e.DiziAdi)
+                .HasMaxLength(50)
+                .HasColumnName("Dizi Adi");
+            entity.Property(e => e.Sure).HasMaxLength(30);
+        });
+
+        modelBuilder.Entity<DizilerVeKullanicilar>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("DizilerVeKullanicilar");
+
+            entity.Property(e => e.KullaniciId).HasMaxLength(512);
+
+            entity.HasOne(d => d.Dizi).WithMany()
+                .HasForeignKey(d => d.DiziId)
+                .HasConstraintName("FK__DizilerVe__DiziI__793DFFAF");
+
+            entity.HasOne(d => d.Kullanici).WithMany()
+                .HasForeignKey(d => d.KullaniciId)
+                .HasConstraintName("FK__DizilerVe__Kulla__7849DB76");
+        });
+
         modelBuilder.Entity<Kullanicilar>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Kullanic__3214EC0785340526");
