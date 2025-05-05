@@ -37,10 +37,10 @@ builder.Services.AddDbContext<OneridbContext>(options =>
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["Jwt:Issuer"],
-                        ValidAudience = configuration["Jwt:Audience"],
+                        ValidIssuer = configuration["JWT:Issuer"],
+                        ValidAudience = configuration["JWT:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"] ?? ""))
+                        Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"] ?? ""))
                     };
                 });
 

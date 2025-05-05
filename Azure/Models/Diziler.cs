@@ -13,5 +13,7 @@ public partial class Diziler
 
     public DateOnly Tarih { get; set; }
 
-    public string Sure { get; set; } = null!;
+    public int Sure { get; set; }
+
+    public int SezonSayisi { get; set; }
 }
