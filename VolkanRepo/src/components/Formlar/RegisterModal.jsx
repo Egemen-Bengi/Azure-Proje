@@ -11,19 +11,19 @@ const RegisterModal = ({ isModalOpen, setIsModalOpen, handleRegister }) => {
     >
       <Form layout="vertical" onFinish={handleRegister}>
         <Form.Item
-          label="E-posta"
-          name="email"
-          rules={[{ required: true, message: "Lütfen e-posta girin!" }]}
+          label="Kullanıcı Adı"
+          name="KullaniciAdi"
+          rules={[{ required: true, message: "Lütfen kullanıcı adı girin!" }]}
         >
-          <Input type="email" />
+          <Input placeholder="Kullanıcı adınızı girin" />
         </Form.Item>
 
         <Form.Item
           label="Şifre"
-          name="password"
+          name="Parola"
           rules={[{ required: true, message: "Lütfen şifre girin!" }]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Şifrenizi girin" />
         </Form.Item>
 
         <Form.Item>

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Input, Modal, AutoComplete } from "antd";
 import "antd/dist/reset.css";
-import { Header } from "antd/es/layout/layout";
-import RegisterModal from "./RegisterModal";
+
 
 const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
-  const [options, setOptions] = useState([]);
+ 
   return (
 
       <div style={{ width: "100%", maxWidth: 600 }}>
@@ -28,19 +27,19 @@ const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
           autoComplete="off"
         >
           <Form.Item
-            label="E-posta"
-            name="email"
-            rules={[{ required: true, message: "Lütfen e-posta girin!" }]}
+            label="Kullanıcı Adı"
+            name="KullaniciAdi"
+            rules={[{ required: true, message: "Lütfen kullanıcı adı girin!" }]}
           >
-            <Input type="email" />
+            <Input placeholder="Kullanıcı Adı" />
           </Form.Item>
 
           <Form.Item
             label="Şifre"
-            name="password"
+           name="Parola"
             rules={[{ required: true, message: "Lütfen şifre girin!!" }]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Şifre" />
           </Form.Item>
 
           <Form.Item name="remember" valuePropName="checked">
