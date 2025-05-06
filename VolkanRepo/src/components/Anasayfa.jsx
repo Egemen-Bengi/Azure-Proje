@@ -12,8 +12,10 @@ import FilmOneriFormu from "./Formlar/FilmOneriForm";
 import DiziOneriFormu from "./Formlar/DiziOneriFormu";
 import FilmlerFormu from "./Formlar/FilmlerFormu";
 import DizilerFormu from "./Formlar/DizilerFormu";
-import IzlenecekFilmlerForm from "./Formlar/İzlenecekFilmlerForm";
-import IzlenecekDizilerForm from "./Formlar/İzlenecekDizilerForm";
+import IzlenecekFilmlerForm from "./Formlar/BegendigimFilmlerForm";
+import IzlenecekDizilerForm from "./Formlar/BegendigimDizilerForm";
+import BegendigimFilmlerForm from "./Formlar/BegendigimFilmlerForm";
+import BegendigimDizilerForm from "./Formlar/BegendigimDizilerForm";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -33,13 +35,9 @@ const items = [
     getItem("Film Önerisi", "3"),
     getItem("Dizi Önerisi", "4"),
   ]),
-  getItem("İzleme Listesi", "sub2", <HeartOutlined />, [
-    getItem("İzlenecek Filmer", "6"),
-    getItem("İzlenecek Diziler", "7"),
-  ]),
-  getItem("İzleme Geçmişi", "sub3", <HistoryOutlined />, [
-    getItem("İzlediğim Filmler", "8"),
-    getItem("İzlediğim Diziler", "9"),
+  getItem("Beğenilenler", "sub2", <HeartOutlined />, [
+    getItem("Beğenilenler Filmler", "6"),
+    getItem("Beğenilenler Diziler", "7"),
   ]),
 ];
 
@@ -107,13 +105,9 @@ const Anasayfa = () => {
                 case "4":
                   return <h2><DiziOneriFormu></DiziOneriFormu></h2>;
                 case "6":
-                  return <h2><IzlenecekFilmlerForm/></h2>;
+                  return <h2><BegendigimFilmlerForm/></h2>;
                 case "7":
-                  return <h2><IzlenecekDizilerForm/></h2>;
-                case "8":
-                  return <h2>İzlediğim Filmler İçeriği</h2>;
-                case "9":
-                  return <h2>İzlediğim Diziler İçeriği</h2>;
+                  return <h2><BegendigimDizilerForm/></h2>;
                 default:
                   return null;
               }
