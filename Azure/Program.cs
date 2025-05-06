@@ -55,6 +55,8 @@ builder.Services.AddScoped<IKullaniciRepository, KullaniciRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IDiziRepository, DiziRepository>();
 builder.Services.AddScoped<IDizilerKullanicilarRepository, DizilerKullanicilarRepository>();
+builder.Services.AddScoped<IFilmlerKullanicilarRepository, FilmlerKullanicilarRepository>();
+builder.Services.AddScoped<IFilmRepository, FilmRepository>();
 builder.Services.AddFunctionsWorkerDefaults();
 
 var host = builder.Build();

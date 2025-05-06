@@ -40,7 +40,8 @@ namespace Azure.Controllers
             {
                 var diziKullaniciCreated = await _repository.CreateDiziVeKullaniciAsync(claims["nameid"], diziId);
 
-                return new CreatedAtActionResult(nameof(GetDiziVeKullaniciByKullaniciId), "DiziKullanici", null, diziKullaniciCreated);
+                return new CreatedResult($"/api/dizi-kullanici/kullanici", diziKullaniciCreated);
+
             }
             
             catch (Exception ex)
