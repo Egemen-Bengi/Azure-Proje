@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Azure.DTOs.RolDtos;
+using Azure.DTOs.DiziDtos;
 using Azure.Interfaces;
-using Azure.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 
 namespace Azure.Controllers
 {
-    public class RolController
+    public class DiziController
     {
-        private readonly IRolRepository _rollerRepo;
+        private readonly IDiziRepository _diziRepo;
         private readonly ITokenService _tokenService;
-        public RolController(IRolRepository rollerRepo, ITokenService tokenService)
+        public DiziController(IDiziRepository diziRepo, ITokenService tokenService)
         {
-            _rollerRepo = rollerRepo;
+            _diziRepo = diziRepo;
             _tokenService = tokenService;
         }
 
-        [Function("GetRoller")]
-        public async Task<IActionResult> GetRoller([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rol")] HttpRequest req)
+        [Function("GetDiziler")]
+        public async Task<IActionResult> GetDiziler([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/dizi")] HttpRequest req)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -36,44 +34,15 @@ namespace Azure.Controllers
                 return new UnauthorizedObjectResult("Gecersiz Token");
 
             var claims = _tokenService.GetTokenClaims(token);
-            
-            if(claims["role"] != "Admin")
+
+            if(claims["role"] == null)
                 return new UnauthorizedObjectResult("Yetkisiz Erisim");
 
             try
             {
-                var roller = await _rollerRepo.GetRollerAsync();
+            var diziler = await _diziRepo.GetAllDizilerAsync();
 
-                return new OkObjectResult(roller);
-            }
-            catch(Exception)
-            {
-                return new BadRequestObjectResult("Roller alinirken bir sorun olustu!");
-            }
-        }
-
-        [Function("GetRolById")]
-        public async Task<IActionResult> GetRolById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rol/{id}")] HttpRequest req, int id)
-        {
-            string? authHeader = req.Headers.Authorization;
-            if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return new UnauthorizedObjectResult("Token yok veya yanlis");
-
-            string token = authHeader["Bearer ".Length..].Trim();
-
-            if(!_tokenService.ValidateToken(token))
-                return new UnauthorizedObjectResult("Gecersiz Token");
-
-            var claims = _tokenService.GetTokenClaims(token);
-            
-            if(claims["role"] != "Admin")
-                return new UnauthorizedObjectResult("Yetkisiz Erisim");
-
-            try
-            {
-                var rol = await _rollerRepo.GetRolByIdAsync(id);
-
-                return new OkObjectResult(rol);
+            return new OkObjectResult(diziler);
             }
             catch(Exception e)
             {
@@ -81,8 +50,37 @@ namespace Azure.Controllers
             }
         }
 
-        [Function("DeleteRolById")]
-        public async Task<IActionResult> DeleteRolById([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "rol/{id}")] HttpRequest req, int id)
+        [Function("GetDiziById")]
+        public async Task<IActionResult> GetDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/dizi/{id}")] HttpRequest req, int id)
+        {
+            string? authHeader = req.Headers.Authorization;
+            if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedObjectResult("Token yok veya yanlis");
+
+            string token = authHeader["Bearer ".Length..].Trim();
+
+            if(!_tokenService.ValidateToken(token))
+                return new UnauthorizedObjectResult("Gecersiz Token");
+
+            var claims = _tokenService.GetTokenClaims(token);
+
+            if(claims["role"] == null)
+                return new UnauthorizedObjectResult("Yetkisiz Erisim");
+
+            try
+            {
+                var dizi = await _diziRepo.GetDiziByIdAsync(id);
+
+                return new OkObjectResult(dizi);
+            }
+            catch(Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+        }
+
+        [Function("DeleteDiziById")]
+        public async Task<IActionResult> DeleteDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "api/dizi/{id}")] HttpRequest req, int id)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -100,9 +98,9 @@ namespace Azure.Controllers
 
             try
             {
-                var rol = await _rollerRepo.DeleteRolByIdAsync(id);
+                var dizi = await _diziRepo.DeleteDiziByIdAsync(id);
 
-                return new OkObjectResult(rol);
+                return new OkObjectResult(dizi);
             }
             catch(Exception e)
             {
@@ -110,8 +108,8 @@ namespace Azure.Controllers
             }
         }
 
-        [Function("CreateRol")]
-        public async Task<IActionResult> CreateRol([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rol")] HttpRequest req)
+        [Function("CreateDizi")]
+        public async Task<IActionResult> CreateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/dizi")] HttpRequest req)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -124,40 +122,6 @@ namespace Azure.Controllers
 
             var claims = _tokenService.GetTokenClaims(token);
 
-            if(claims["role"] != "Admin")
-                return new UnauthorizedObjectResult("Yetkisiz Erisim");
-            
-            
-            try
-            {
-                using var reader = new StreamReader(req.Body);
-                string requestBody = await reader.ReadToEndAsync();
-                RolCreateDto rolCreateDto = JsonSerializer.Deserialize<RolCreateDto>(requestBody) ?? throw new Exception("Body parametresi duzgun girilmelidir");
-
-                var addedRol = await _rollerRepo.CreateRolAsync(rolCreateDto);
-
-                return new OkObjectResult(addedRol);
-            }
-            catch(Exception e)
-            {
-                return new BadRequestObjectResult(e.Message);
-            }
-        }
-
-        [Function("UpdateRol")]
-        public async Task<IActionResult> UpdateRol([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rol")] HttpRequest req)
-        {
-            string? authHeader = req.Headers.Authorization;
-            if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return new UnauthorizedObjectResult("Token yok veya yanlis");
-
-            string token = authHeader["Bearer ".Length..].Trim();
-
-            if(!_tokenService.ValidateToken(token))
-                return new UnauthorizedObjectResult("Gecersiz Token");
-
-            var claims = _tokenService.GetTokenClaims(token);
-            
             if(claims["role"] != "Admin")
                 return new UnauthorizedObjectResult("Yetkisiz Erisim");
 
@@ -165,16 +129,49 @@ namespace Azure.Controllers
             {
                 using var reader = new StreamReader(req.Body);
                 string requestBody = await reader.ReadToEndAsync();
-                RolUpdateDto rolUpdateDto = JsonSerializer.Deserialize<RolUpdateDto>(requestBody) ?? throw new Exception("Body parametresi duzgun girilmelidir");
+                DiziCreateDto diziCreateDto = JsonSerializer.Deserialize<DiziCreateDto>(requestBody) ?? throw new Exception("Body parametresi duzgun girilmelidir");
 
-                var updatedRol = await _rollerRepo.UpdateRolAsync(rolUpdateDto);
+                var dizi = await _diziRepo.CreateDiziAsync(diziCreateDto);
 
-                return new OkObjectResult(updatedRol);
+                return new CreatedAtActionResult("GetDiziById", "Dizi", new { id = dizi.Id }, dizi);
             }
             catch(Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
+            }   
+        }
+
+        [Function("UpdateDizi")]
+        public async Task<IActionResult> UpdateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "api/dizi/{id}")] HttpRequest req, int id)
+        {
+            string? authHeader = req.Headers.Authorization;
+            if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedObjectResult("Token yok veya yanlis");
+
+            string token = authHeader["Bearer ".Length..].Trim();
+
+            if(!_tokenService.ValidateToken(token))
+                return new UnauthorizedObjectResult("Gecersiz Token");
+
+            var claims = _tokenService.GetTokenClaims(token);
+
+            if(claims["role"] != "Admin")
+                return new UnauthorizedObjectResult("Yetkisiz Erisim");
+
+            try
+            {
+                using var reader = new StreamReader(req.Body);
+                string requestBody = await reader.ReadToEndAsync();
+                DiziUpdateDto diziUpdateDto = JsonSerializer.Deserialize<DiziUpdateDto>(requestBody) ?? throw new Exception("Body parametresi duzgun girilmelidir");
+
+                var dizi = await _diziRepo.UpdateDiziAsync(id, diziUpdateDto);
+
+                return new OkObjectResult(dizi);
             }
+            catch(Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }   
         }
     }
 }

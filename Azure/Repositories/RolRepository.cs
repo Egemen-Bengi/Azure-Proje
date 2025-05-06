@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Azure.Repositories
 {
-    public class RolRepository : IRollerRepository
+    public class RolRepository : IRolRepository
     {
         private readonly OneridbContext _context;
         public RolRepository(OneridbContext context)

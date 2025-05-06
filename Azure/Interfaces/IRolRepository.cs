@@ -7,7 +7,7 @@ using Azure.Models;
 
 namespace Azure.Interfaces
 {
-    public interface IRollerRepository
+    public interface IRolRepository
     {
         public Task<Roller> CreateRolAsync(RolCreateDto rolCreateDto);
         public Task<RolDto> UpdateRolAsync(RolUpdateDto rolUpdateDto);
