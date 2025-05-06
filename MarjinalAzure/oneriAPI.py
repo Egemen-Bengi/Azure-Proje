@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from typing import List
-from eddOneriBot import oneri
+from oneri import eddOneriBot
 
 app = FastAPI()
 

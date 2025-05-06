@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import havalıFoto from '../ddevo/pprofil.jpeg';
+import { Avatar } from 'antd';
 import {
   DesktopOutlined,
   HistoryOutlined,
@@ -7,7 +9,7 @@ import {
   RobotOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import "./cssDosyalari/Anasayfa.css"; // CSS dosyasını içe aktarın
+import "./cssDosyalari/Anasayfa.css"; 
 import FilmOneriFormu from "./Formlar/FilmOneriForm";
 import DiziOneriFormu from "./Formlar/DiziOneriFormu";
 import FilmlerFormu from "./Formlar/FilmlerFormu";
@@ -121,7 +123,7 @@ const Anasayfa = () => {
           </div>
         </Content>
         <Footer className="footer">
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          <Avatar size="large" src={havalıFoto} />
         </Footer>
       </Layout>
     </Layout>

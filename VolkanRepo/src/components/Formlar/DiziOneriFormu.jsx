@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input } from 'antd';
 
 const DiziOneriFormu = () => {
-    const handleSubmit = (event) => {
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+      }
+
+    const handleSubmit = () => {
         //burada apiye veri gönderme işlemi yapılacak
+        console.log(inputValue);
       };
   return (
     <div style={{ width: '100%', maxWidth: 600 }}>
@@ -20,7 +27,9 @@ const DiziOneriFormu = () => {
         }}
       >
         <Input 
-          placeholder="Izlediginiz bir dizinin adini giriniz"  
+          placeholder="Izlediginiz bir dizinin adini giriniz"
+          value={inputValue}
+          onChange={handleInputChange}
         />
         <Button type="primary"  onClick={handleSubmit}> Gonder </Button>
       </form>
