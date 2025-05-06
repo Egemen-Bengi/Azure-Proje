@@ -64,7 +64,7 @@ namespace Azure.Controllers
         }
 
         [Function("GetUserByEmail")]
-        public async Task<IActionResult> GetUserByEmail([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici/{email}")] HttpRequest request, string email)
+        public async Task<IActionResult> GetUserByEmail([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "kullanici/email/{email}")] HttpRequest request, string email)
         {
             string? authHeader = request.Headers.Authorization;
 

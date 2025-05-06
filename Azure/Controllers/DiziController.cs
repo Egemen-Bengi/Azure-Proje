@@ -22,7 +22,7 @@ namespace Azure.Controllers
         }
 
         [Function("GetDiziler")]
-        public async Task<IActionResult> GetDiziler([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/dizi")] HttpRequest req)
+        public async Task<IActionResult> GetDiziler([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "dizi")] HttpRequest req)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -51,7 +51,7 @@ namespace Azure.Controllers
         }
 
         [Function("GetDiziById")]
-        public async Task<IActionResult> GetDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/dizi/{id}")] HttpRequest req, int id)
+        public async Task<IActionResult> GetDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "dizi/{id}")] HttpRequest req, int id)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -80,7 +80,7 @@ namespace Azure.Controllers
         }
 
         [Function("DeleteDiziById")]
-        public async Task<IActionResult> DeleteDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "api/dizi/{id}")] HttpRequest req, int id)
+        public async Task<IActionResult> DeleteDiziById([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "dizi/{id}")] HttpRequest req, int id)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -109,7 +109,7 @@ namespace Azure.Controllers
         }
 
         [Function("CreateDizi")]
-        public async Task<IActionResult> CreateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/dizi")] HttpRequest req)
+        public async Task<IActionResult> CreateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "dizi")] HttpRequest req)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -142,7 +142,7 @@ namespace Azure.Controllers
         }
 
         [Function("UpdateDizi")]
-        public async Task<IActionResult> UpdateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "api/dizi/{id}")] HttpRequest req, int id)
+        public async Task<IActionResult> UpdateDizi([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "dizi/{id}")] HttpRequest req, int id)
         {
             string? authHeader = req.Headers.Authorization;
             if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))

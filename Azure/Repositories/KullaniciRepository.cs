@@ -61,7 +61,7 @@ namespace Azure.Repositories
 
         public async Task<Kullanicilar> DeleteKullaniciById(string id)
         {
-            var kullanici = await _context.Kullanicilars.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Kullanici bulunamadi");
+            var kullanici = await _context.Kullanicilars.Include(x => x.Rol).FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Kullanici bulunamadi");
 
             _context.Kullanicilars.Remove(kullanici);
             await _context.SaveChangesAsync();

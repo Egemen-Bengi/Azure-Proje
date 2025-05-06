@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Azure.Models;
 
@@ -15,7 +16,6 @@ public partial class Filmler
 
     public int Sure { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Kullanicilar> Kullanicis { get; set; } = new List<Kullanicilar>();
-
-    public virtual ICollection<Kullanicilar> KullanicisNavigation { get; set; } = new List<Kullanicilar>();
 }

@@ -52,9 +52,10 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IKullaniciRepository, KullaniciRepository>();
-builder.Services.AddScoped<IRollerRepository, RolRepository>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
+builder.Services.AddScoped<IDiziRepository, DiziRepository>();
+builder.Services.AddScoped<IDizilerKullanicilarRepository, DizilerKullanicilarRepository>();
 builder.Services.AddFunctionsWorkerDefaults();
-
 
 var host = builder.Build();
 host.Run();

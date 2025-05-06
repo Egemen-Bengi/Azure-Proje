@@ -17,7 +17,7 @@ public partial class Kullanicilar
 
     public virtual Roller Rol { get; set; } = null!;
 
-    public virtual ICollection<Filmler> Films { get; set; } = new List<Filmler>();
+    public virtual ICollection<Diziler> Dizis { get; set; } = new List<Diziler>();
 
-    public virtual ICollection<Filmler> FilmsNavigation { get; set; } = new List<Filmler>();
+    public virtual ICollection<Filmler> Films { get; set; } = new List<Filmler>();
 }

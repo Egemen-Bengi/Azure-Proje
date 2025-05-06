@@ -76,39 +76,39 @@ public partial class OneridbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Kullanici__Rol I__6AEFE058");
 
-            entity.HasMany(d => d.Films).WithMany(p => p.Kullanicis)
+            entity.HasMany(d => d.Dizis).WithMany(p => p.Kullanicis)
                 .UsingEntity<Dictionary<string, object>>(
-                    "DizilerVeKullanicilar",
-                    r => r.HasOne<Filmler>().WithMany()
-                        .HasForeignKey("FilmId")
+                    "DizilerKullanicilar",
+                    r => r.HasOne<Diziler>().WithMany()
+                        .HasForeignKey("DiziId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__DizilerVe__FilmI__0880433F"),
+                        .HasConstraintName("FK__DizilerKu__DiziI__1C873BEC"),
                     l => l.HasOne<Kullanicilar>().WithMany()
                         .HasForeignKey("KullaniciId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__DizilerVe__Kulla__078C1F06"),
+                        .HasConstraintName("FK__DizilerKu__Kulla__1B9317B3"),
                     j =>
                     {
-                        j.HasKey("KullaniciId", "FilmId").HasName("PK__DizilerV__36C0256CD845C735");
-                        j.ToTable("DizilerVeKullanicilar");
+                        j.HasKey("KullaniciId", "DiziId").HasName("PK__DizilerK__77CB8BE60ADF0003");
+                        j.ToTable("DizilerKullanicilar");
                         j.IndexerProperty<string>("KullaniciId").HasMaxLength(512);
                     });
 
-            entity.HasMany(d => d.FilmsNavigation).WithMany(p => p.KullanicisNavigation)
+            entity.HasMany(d => d.Films).WithMany(p => p.Kullanicis)
                 .UsingEntity<Dictionary<string, object>>(
-                    "FilmlerVeKullanicilar",
+                    "FilmlerKullanicilar",
                     r => r.HasOne<Filmler>().WithMany()
                         .HasForeignKey("FilmId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__FilmlerVe__FilmI__04AFB25B"),
+                        .HasConstraintName("FK__FilmlerKu__FilmI__2057CCD0"),
                     l => l.HasOne<Kullanicilar>().WithMany()
                         .HasForeignKey("KullaniciId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__FilmlerVe__Kulla__03BB8E22"),
+                        .HasConstraintName("FK__FilmlerKu__Kulla__1F63A897"),
                     j =>
                     {
-                        j.HasKey("KullaniciId", "FilmId").HasName("PK__FilmlerV__36C0256CA7FBD50D");
-                        j.ToTable("FilmlerVeKullanicilar");
+                        j.HasKey("KullaniciId", "FilmId").HasName("PK__FilmlerK__36C0256CD34445C1");
+                        j.ToTable("FilmlerKullanicilar");
                         j.IndexerProperty<string>("KullaniciId").HasMaxLength(512);
                     });
         });
