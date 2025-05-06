@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Input, Modal, AutoComplete } from "antd";
 import "antd/dist/reset.css";
-import { Header } from "antd/es/layout/layout";
-import RegisterModal from "./RegisterModal";
+
 
 const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
  

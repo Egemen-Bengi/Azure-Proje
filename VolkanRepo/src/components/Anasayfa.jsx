@@ -12,8 +12,6 @@ import FilmOneriFormu from "./Formlar/FilmOneriForm";
 import DiziOneriFormu from "./Formlar/DiziOneriFormu";
 import FilmlerFormu from "./Formlar/FilmlerFormu";
 import DizilerFormu from "./Formlar/DizilerFormu";
-import IzlenecekFilmlerForm from "./Formlar/BegendigimFilmlerForm";
-import IzlenecekDizilerForm from "./Formlar/BegendigimDizilerForm";
 import BegendigimFilmlerForm from "./Formlar/BegendigimFilmlerForm";
 import BegendigimDizilerForm from "./Formlar/BegendigimDizilerForm";
 
