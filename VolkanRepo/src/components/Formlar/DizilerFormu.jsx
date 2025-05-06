@@ -97,7 +97,7 @@ const DizilerFormu = () => {
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <img
                                     alt="avatar"
-                                    src={`${imagePath}${formattedName}.jpg`} // Dinamik resim yolu
+                                    src={`${imagePath}${formattedName}.jpg`}
                                     style={imgStyle}
                                 />
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', padding: 32 }}>
