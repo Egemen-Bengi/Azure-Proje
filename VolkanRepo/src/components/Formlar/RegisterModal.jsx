@@ -10,6 +10,13 @@ const RegisterModal = ({ isModalOpen, setIsModalOpen, handleRegister }) => {
       footer={null}
     >
       <Form layout="vertical" onFinish={handleRegister}>
+      <Form.Item
+          label="E-posta"
+          name="Email"
+          rules={[{ required: true, message: "Lütfen şifre girin!" }]}
+        >
+          <Input placeholder="E-Postanızı giriniz" />
+        </Form.Item>
         <Form.Item
           label="Kullanıcı Adı"
           name="KullaniciAdi"
