@@ -19,35 +19,48 @@ namespace Azure.Repositories
         }
         public async Task<DizilerKullanicilarDto> CreateDiziVeKullaniciAsync(string KullaniciId, int diziId)
         {
-            // Kullanıcıyı kontrol ediyoruz
-            var kullanici = await _context.Kullanicilars
-                .FirstOrDefaultAsync(k => k.Id == KullaniciId)
-                ?? throw new Exception("Kullanıcı bulunamadı.");
-
-            if (kullanici.Dizis.Any(d => d.Id == diziId))
+            try
             {
-                throw new Exception("Bu kullanıcı zaten bu diziyle ilişkilendirilmiş.");
+                // Kullanıcıyı kontrol ediyoruz
+                var kullanici = await _context.Kullanicilars
+                    .FirstOrDefaultAsync(k => k.Id == KullaniciId)
+                    ?? throw new Exception("Kullanıcı bulunamadı.");
+
+                if (kullanici.Dizis.Any(d => d.Id == diziId))
+                {
+                    throw new Exception("Bu kullanıcı zaten bu diziyle ilişkilendirilmiş.");
+                }
+
+                // Diziyi kontrol ediyoruz
+                var dizi = await _context.Dizilers
+                    .FirstOrDefaultAsync(d => d.Id == diziId)
+                    ?? throw new Exception("Dizi bulunamadı.");
+
+                // Kullanıcı ile dizi arasındaki ilişkiyi ekliyoruz
+                kullanici.Dizis.Add(dizi);
+
+                // Değişiklikleri veritabanına kaydediyoruz
+                await _context.SaveChangesAsync();
+
+                // Eklenen ilişkiyi DTO olarak döndürüyoruz
+                return new DizilerKullanicilarDto
+                {
+                    KullaniciId = kullanici.Id,
+                    DiziId = dizi.Id,
+                    Kullanici = kullanici,
+                    Dizi = dizi
+                };
             }
-
-            // Diziyi kontrol ediyoruz
-            var dizi = await _context.Dizilers
-                .FirstOrDefaultAsync(d => d.Id == diziId)
-                ?? throw new Exception("Dizi bulunamadı.");
-
-            // Kullanıcı ile dizi arasındaki ilişkiyi ekliyoruz
-            kullanici.Dizis.Add(dizi);
-
-            // Değişiklikleri veritabanına kaydediyoruz
-            await _context.SaveChangesAsync();
-
-            // Eklenen ilişkiyi DTO olarak döndürüyoruz
-            return new DizilerKullanicilarDto
+            catch (DbUpdateException dbEx)
             {
-                KullaniciId = kullanici.Id,
-                DiziId = dizi.Id,
-                Kullanici = kullanici,
-                Dizi = dizi
-            };
+                // Veritabanı güncelleme hatalarını yakala
+                throw new Exception("Veritabanı güncelleme hatası: " + dbEx.InnerException?.Message ?? dbEx.Message);
+            }
+            catch (Exception ex)
+            {
+                // Diğer hataları yakala
+                throw new Exception("Bir hata oluştu: " + ex.Message);
+            }
         }
 
         public async Task<DizilerKullanicilarDto> DeleteDiziVeKullaniciByIdAsync(string kullaniciId, int diziId)

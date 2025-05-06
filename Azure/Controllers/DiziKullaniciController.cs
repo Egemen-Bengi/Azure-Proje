@@ -26,13 +26,13 @@ namespace Azure.Controllers
         public async Task<IActionResult> CreateDiziKullanici([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "dizi-kullanici/{diziId}")] HttpRequest req, int diziId)
         {
             string? authHeader = req.Headers.Authorization;
-            if(string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return new UnauthorizedObjectResult("Token yok veya yanlis");
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return new UnauthorizedObjectResult("Token yok veya yanlış");
 
             string token = authHeader["Bearer ".Length..].Trim();
 
-            if(!_tokenService.ValidateToken(token))
-                return new UnauthorizedObjectResult("Gecersiz Token");
+            if (!_tokenService.ValidateToken(token))
+                return new UnauthorizedObjectResult("Geçersiz Token");
 
             var claims = _tokenService.GetTokenClaims(token);
 
@@ -41,11 +41,10 @@ namespace Azure.Controllers
                 var diziKullaniciCreated = await _repository.CreateDiziVeKullaniciAsync(claims["nameid"], diziId);
 
                 return new CreatedResult($"/api/dizi-kullanici/kullanici", diziKullaniciCreated);
-
             }
-            
             catch (Exception ex)
             {
+                // Hata mesajını kullanıcıya döndür
                 return new BadRequestObjectResult($"Hata: {ex.Message}");
             }
         }
