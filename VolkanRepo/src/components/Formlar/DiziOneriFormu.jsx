@@ -2,15 +2,44 @@ import React, { useState } from 'react';
 import { Button, Input } from 'antd';
 
 const DiziOneriFormu = () => {
-    const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [oneri, setOneri] = useState("");
 
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-      }
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  }
 
-    const handleSubmit = () => {
-        
+  const handleSubmit = () => {
+    const seriesBody = inputValue.split(',').map((dizi) => dizi.trim());
+
+    const fetchAzure = async () => {
+      try {
+        const response = await fetch(
+          `https://projeapi.azurewebsites.net/api/oneri/dizi`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(seriesBody),
+          }
+        );
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(errorMessage);
+        }
+
+        const data = await response.text();
+        setOneri(data);
+      } catch (error) {
+        console.error("Hata:", error.message);
       };
+
+      fetchAzure();
+    };
+  }
   return (
     <div style={{ width: '100%', maxWidth: 600 }}>
       <h2>Dizi Öneri Botu</h2>
@@ -25,12 +54,12 @@ const DiziOneriFormu = () => {
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Input 
+        <Input
           placeholder="Izlediginiz bir dizinin adini giriniz"
           value={inputValue}
           onChange={handleInputChange}
         />
-        <Button type="primary"  onClick={handleSubmit}> Gonder </Button>
+        <Button type="primary" onClick={handleSubmit}> Gonder </Button>
       </form>
     </div>
   );
