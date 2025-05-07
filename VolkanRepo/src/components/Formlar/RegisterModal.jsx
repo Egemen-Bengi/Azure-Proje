@@ -2,18 +2,25 @@ import React from "react";
 import { Button, Form, Input, Modal } from "antd";
 
 const RegisterModal = ({ isModalOpen, setIsModalOpen, handleRegister }) => {
+  const [form] = Form.useForm(); 
+
+  const handleCancel = () => {
+    form.resetFields(); 
+    setIsModalOpen(false); 
+  };
+
   return (
     <Modal
       title="Kayıt Ol"
       open={isModalOpen}
-      onCancel={() => setIsModalOpen(false)}
+      onCancel={handleCancel} 
       footer={null}
     >
-      <Form layout="vertical" onFinish={handleRegister}>
-      <Form.Item
+      <Form form={form} layout="vertical" onFinish={handleRegister}>
+        <Form.Item
           label="E-posta"
           name="Email"
-          rules={[{ required: true, message: "Lütfen şifre girin!" }]}
+          rules={[{ required: true, message: "Lütfen e-posta girin!" }]}
         >
           <Input placeholder="E-Postanızı giriniz" />
         </Form.Item>

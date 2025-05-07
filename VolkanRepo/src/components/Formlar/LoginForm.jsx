@@ -8,7 +8,7 @@ const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
   return (
 
       <div style={{ width: "100%", maxWidth: 600 }}>
-        {/* Giriş Formu */}
+       
         <Form
           name="basic"
           layout="vertical"
@@ -40,10 +40,6 @@ const LoginForm = ({onFinish, onFinishFailed, showRegisterModal}) => {
             rules={[{ required: true, message: "Lütfen şifre girin!!" }]}
           >
             <Input.Password placeholder="Şifre" />
-          </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Beni Hatırla</Checkbox>
           </Form.Item>
 
           <Form.Item>
