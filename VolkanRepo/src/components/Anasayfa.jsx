@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Avatar } from 'antd';
+import { Avatar, Button } from "antd";
 import {
   DesktopOutlined,
-  HistoryOutlined,
   AppstoreOutlined,
   HeartOutlined,
   RobotOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import "./cssDosyalari/Anasayfa.css"; 
+import "./cssDosyalari/Anasayfa.css";
 import FilmOneriFormu from "./Formlar/FilmOneriForm";
 import DiziOneriFormu from "./Formlar/DiziOneriFormu";
 import FilmlerFormu from "./Formlar/FilmlerFormu";
@@ -48,6 +47,11 @@ const Anasayfa = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const logoutHandler = () => {
+    localStorage.removeItem("token"); 
+    window.location.href = "/"; 
+  };
+
   const handleMenuClick = ({ key }) => {
     setSelectedMenuKey(key);
     const selectedItem = items.find(
@@ -71,9 +75,7 @@ const Anasayfa = () => {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className="demo-logo-vertical" />
-        <div className="sider-header">
-          
-        </div>
+        <div className="sider-header"></div>
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
@@ -86,11 +88,14 @@ const Anasayfa = () => {
         <Header className="header">
           <div className="header-content">
             <h1 className="header-title">{selectedMenuLabel}</h1>
+            <Button type="primary" onClick={logoutHandler} style={{ float: "right" }}>
+              Logout
+            </Button>
           </div>
         </Header>
         <Content className="content">
           <Breadcrumb className="breadcrumb">
-            {/* Burada breadcrumb öğelerini dinamik olarak oluşturabilirsiniz */}
+         
           </Breadcrumb>
           <div className="content-container">
             {(() => {
@@ -114,7 +119,11 @@ const Anasayfa = () => {
           </div>
         </Content>
         <Footer className="footer">
-          {/* <Avatar size="large" src={havalıFoto} /> */}
+        {<Avatar size="medium" src={'photos/dilan.jpeg'} /> }
+        {<Avatar size="medium" src={'photos/dilara.jpeg'} /> }
+        {<Avatar size="medium" src={'photos/egemen.jpeg'} /> }
+        {<Avatar size="medium" src={'photos/onur.jpeg'} /> }
+        {<Avatar size="medium" src={'photos/volkan.jpeg'} /> }
         </Footer>
       </Layout>
     </Layout>

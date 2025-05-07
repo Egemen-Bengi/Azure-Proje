@@ -70,7 +70,7 @@ const BegendigimFilmlerForm = () => {
       .then((data) => {
         console.log("Silinen veri:", data);
         setBegendigimFilmler(
-          (prev) => prev.filter((film) => film.filmId !== filmId) // Corrected from film.filmID to film.filmId
+          (prev) => prev.filter((film) => film.filmId !== filmId) 
         );
       })
       .catch((error) => {
