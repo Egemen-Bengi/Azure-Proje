@@ -11,14 +11,14 @@ const GirisEkrani = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await fetch("http://localhost:7071/api/account/login", {
+      const response = await fetch("https://projeapi.azurewebsites.net/api/account/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          KullaniciAdi: values.kullaniciAdi,
-          Parola: values.parola,
+          KullaniciAdi: values.KullaniciAdi,
+          Parola: values.Parola,
         }),
       });
 
@@ -29,14 +29,14 @@ const GirisEkrani = () => {
       const data = await response.json();
       console.log("Giriş başarılı:", data);
 
-      // Token varsa localStorage ya da state'e kaydedilebilir
+      
       setToken(data.token);
       localStorage.setItem("token", data.token);
 
-      navigate("/anasayfa"); // giriş başarılıysa yönlendir
+      navigate("/anasayfa"); 
     } catch (error) {
       console.error("Hata:", error.message);
-      alert(error.message); // veya kullanıcıya uygun bir mesaj gösterin
+      alert(error.message); 
     }
   };
 
@@ -51,27 +51,28 @@ const GirisEkrani = () => {
   const handleRegister = async (values) => {
     const payload = {
       KullaniciAdi: values.KullaniciAdi,
-      Parola: values.Parola
+      Parola: values.Parola,
+      Email: values.Email, 
     };
-  
+
     try {
-      const response = await fetch("http://localhost:7071/api/account/register", {
+      const response = await fetch("https://projeapi.azurewebsites.net/api/account/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (!response.ok) {
         throw new Error("Kayıt işlemi başarısız oldu.");
       }
-  
+
       const data = await response.json();
       console.log("Kayıt başarılı:", data);
-  
+
       alert("Kayıt başarılı! Giriş yapabilirsiniz.");
-      setIsModalOpen(false); 
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Kayıt hatası:", error.message);
       alert(error.message);
