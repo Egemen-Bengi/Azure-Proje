@@ -1,0 +1,7 @@
+DOTNET:
+-dotnet watch run
+
+#####################
+
+AZURE:
+-func start --verbose

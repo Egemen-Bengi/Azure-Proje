@@ -16,39 +16,33 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
-// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
-// builder.Services
-//     .AddApplicationInsightsTelemetryWorkerService()
-//     .ConfigureFunctionsApplicationInsights();
-
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<OneridbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("AzureConnection"), option => option.EnableRetryOnFailure()));
 
-            // JWT doğrulama yapılandırması
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["JWT:Issuer"],
-                        ValidAudience = configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"] ?? ""))
-                    };
-                });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["JWT:Issuer"],
+            ValidAudience = configuration["JWT:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"] ?? ""))
+        };
+    });
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:5173/") // İzin verilen domain(ler)
+        policy.WithOrigins("http://localhost:5173/", "https://localhost:5174/")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -69,8 +63,6 @@ builder.Services.AddHttpClient<IOneriService, OneriService>();
 builder.Services.AddFunctionsWorkerDefaults();
 
 var host = builder.Build();
-
-// CORS middleware is not applicable for IHost in Azure Functions
 
 host.Run();
 
