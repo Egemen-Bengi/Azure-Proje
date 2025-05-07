@@ -58,7 +58,7 @@ namespace Azure.Services
                 model = deployment,
                 messages = new[]
                 {
-                    new { role = "system", content = $"Sen bir {type} önerme asistanısın. Kullanıcının tercihleri doğrultusunda ona {type} öner." },
+                    new { role = "system", content = $"Sen bir {type} önerme asistanısın. Kullanıcının tercihleri doğrultusunda ona {type} öner. Önerilerini bir json dosyası gibi yaz. Örnek: {{ \"oneri1\":{{ \"{type}_adi\": \"ad\", \"{type}_aciklamasi\": \"aciklama\" }} }} " },
                     new { role = "user", content = prompt }
                 },
                 max_tokens = 800,

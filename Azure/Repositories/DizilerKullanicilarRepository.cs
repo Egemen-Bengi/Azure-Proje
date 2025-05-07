@@ -26,7 +26,13 @@ namespace Azure.Repositories
                     .FirstOrDefaultAsync(k => k.Id == KullaniciId)
                     ?? throw new Exception("Kullanıcı bulunamadı.");
 
-                if (kullanici.Dizis.Any(d => d.Id == diziId))
+                // Kullanıcı ile dizi arasındaki ilişkiyi veritabanında kontrol ediyoruz
+                var existingRelation = await _context.Kullanicilars
+                    .Where(k => k.Id == KullaniciId)
+                    .SelectMany(k => k.Dizis)
+                    .AnyAsync(d => d.Id == diziId);
+
+                if (existingRelation)
                 {
                     throw new Exception("Bu kullanıcı zaten bu diziyle ilişkilendirilmiş.");
                 }

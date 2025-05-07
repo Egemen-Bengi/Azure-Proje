@@ -44,7 +44,15 @@ builder.Services.AddDbContext<OneridbContext>(options =>
                     };
                 });
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173/") // İzin verilen domain(ler)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IPasswordHasher<Kullanicilar>, PasswordHasher<Kullanicilar>>();
@@ -61,5 +69,8 @@ builder.Services.AddHttpClient<IOneriService, OneriService>();
 builder.Services.AddFunctionsWorkerDefaults();
 
 var host = builder.Build();
+
+// CORS middleware is not applicable for IHost in Azure Functions
+
 host.Run();
 

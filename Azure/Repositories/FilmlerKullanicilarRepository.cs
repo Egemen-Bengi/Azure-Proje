@@ -24,10 +24,15 @@ namespace Azure.Repositories
                 .FirstOrDefaultAsync(k => k.Id == kullaniciId)
                 ?? throw new Exception("Kullanıcı bulunamadı.");
 
-            if (kullanici.Films.Any(f => f.Id == filmId))
-            {
-                throw new Exception("Bu kullanıcı zaten bu filmle ilişkilendirilmiş.");
-            }
+            var existingRelation = await _context.Kullanicilars
+                    .Where(k => k.Id == kullaniciId)
+                    .SelectMany(k => k.Films)
+                    .AnyAsync(d => d.Id == filmId);
+
+                if (existingRelation)
+                {
+                    throw new Exception("Bu kullanıcı zaten bu diziyle ilişkilendirilmiş.");
+                }
 
             var film = await _context.Filmlers
                 .FirstOrDefaultAsync(f => f.Id == filmId)
