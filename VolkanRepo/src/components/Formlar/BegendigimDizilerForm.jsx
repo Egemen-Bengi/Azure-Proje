@@ -95,13 +95,11 @@ const BegendigimDizilerForm = () => {
       <ul className="film-list">
         {currentDiziler.map((alinanDizi) => {
           const dizi = alinanDizi.dizi; 
-          const formattedName = dizi.diziAdi
-            ? dizi.diziAdi.trim().replace(/\s+/g, "")
-            : "default";
-          const imagePath = `/Films/${formattedName}.jpg`;
+          const formattedName = dizi.diziAdi.toLowerCase().replace(/\s+/g, '');
+          const imagePath = `/tvSeries/${formattedName}.jpg`;
 
           return (
-            <li key={dizi.diziId} className="film-item">
+            <li key={dizi.id} className="film-item">
               <img
                 src={imagePath}
                 alt={dizi.diziAdi || "Dizi Adı Bulunamadı"}
@@ -120,7 +118,10 @@ const BegendigimDizilerForm = () => {
                 <strong>Bölüm Süresi:</strong>{" "}
                 {dizi.sure ? `${dizi.sure} Dakika` : "Bilinmiyor"}
               </p>
-              <Button onClick={() => {deleteHandler(dizi.diziId); openNotification("top");} }>Sil</Button>
+              <p>
+                <strong>Sezon sayısı:</strong> {dizi.sezonSayisi}
+              </p>
+              <Button onClick={() => {deleteHandler(dizi.id); openNotification("top");} }>Sil</Button>
             </li>
           );
         })}

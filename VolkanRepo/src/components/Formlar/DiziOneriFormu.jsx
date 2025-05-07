@@ -9,8 +9,7 @@ const DiziOneriFormu = () => {
       }
 
     const handleSubmit = () => {
-        //burada apiye veri gönderme işlemi yapılacak
-        console.log(inputValue);
+        
       };
   return (
     <div style={{ width: '100%', maxWidth: 600 }}>

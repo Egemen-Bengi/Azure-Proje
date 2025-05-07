@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import havalıFoto from '../ddevo/pprofil.jpeg';
 import { Avatar } from 'antd';
 import {
   DesktopOutlined,
@@ -115,7 +114,7 @@ const Anasayfa = () => {
           </div>
         </Content>
         <Footer className="footer">
-          <Avatar size="large" src={havalıFoto} />
+          {/* <Avatar size="large" src={havalıFoto} /> */}
         </Footer>
       </Layout>
     </Layout>
