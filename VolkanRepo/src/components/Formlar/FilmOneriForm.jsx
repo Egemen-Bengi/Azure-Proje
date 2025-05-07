@@ -34,14 +34,14 @@ const FilmOneriFormu = () => {
       }
 
       const rawData = await response.text();
-      const validJson = rawData.replace(/'/g, '"'); 
+      const validJson = rawData; 
       const data = JSON.parse(validJson); 
 
       setOneri(data); 
       console.log("API Response:", data); 
     } catch (error) {
-      console.error("Hata:", error.message);
-      setOneri({ error: "Bir hata oluştu: " + error.message }); 
+      console.error("Hata: Filmi anlayamadım");
+      setOneri({ error: "Bir hata oluştu: Filmi anlayamadım" }); 
     } finally {
       setYukleniyor(false); 
     }
@@ -90,7 +90,7 @@ const FilmOneriFormu = () => {
             Object.keys(oneri).map((key) => (
               <div key={key} style={{ marginBottom: "12px" }}>
                 <strong>{oneri[key]["film_adi"]}</strong> 
-                <p>{oneri[key]["aciklama"]}</p> 
+                <p>{oneri[key]["film_aciklamasi"]}</p> 
               </div>
             ))
           )}

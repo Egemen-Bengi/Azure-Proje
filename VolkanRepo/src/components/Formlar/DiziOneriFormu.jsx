@@ -40,8 +40,8 @@ const DiziOneriFormu = () => {
       setOneri(data); 
       console.log("API Response:", data); 
     } catch (error) {
-      console.error("Hata:", error.message);
-      setOneri({ error: "Bir hata oluştu: " + error.message }); 
+      console.error("Hata: Diziyi anlayamadım");
+      setOneri({ error: "Bir hata oluştu: Diziyi anlayamadım" });
     } finally {
       setYukleniyor(false); 
     }
