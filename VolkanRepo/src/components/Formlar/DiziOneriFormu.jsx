@@ -34,7 +34,7 @@ const DiziOneriFormu = () => {
       }
 
       const rawData = await response.text();
-      const validJson = rawData.replace(/'/g, '"'); 
+      const validJson = rawData;
       const data = JSON.parse(validJson); 
 
       setOneri(data); 
@@ -89,8 +89,8 @@ const DiziOneriFormu = () => {
           ) : (
             Object.keys(oneri).map((key) => (
               <div key={key} style={{ marginBottom: "12px" }}>
-                <strong>{oneri[key]["dizi adi"]}</strong>
-                <p>{oneri[key]["aciklama"]}</p>
+                <strong>{oneri[key]["dizi_adi"]}</strong>
+                <p>{oneri[key]["dizi_aciklamasi"]}</p>
               </div>
             ))
           )}
